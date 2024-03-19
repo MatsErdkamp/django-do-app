@@ -20,7 +20,7 @@ from rest_framework import routers
 from digitaltwin.views import CarList
 import os
 from .settings import BASE_DIR
-
+from django.views.generic import TemplateView
 
 router = routers.DefaultRouter()
 router.register(r'car', CarList)
@@ -32,7 +32,7 @@ urlpatterns = [
     path('api/', include(router.urls)),
 
     path('api-auth/', include('rest_framework.urls')),
-    re_path(r'^dashboard/$', lambda request: serve(request, 'index.html', os.path.join(BASE_DIR, 'digital-frontend/dist'))),
-    re_path(r'^dashboard/(?P<path>.*)$', serve, {'document_root': os.path.join(BASE_DIR, 'digital-frontend/dist')}),
+    path("", TemplateView.as_view(template_name="index.html")),
+    re_path(r"^.*$", TemplateView.as_view(template_name="index.html"), name="app"),
 ]
 
