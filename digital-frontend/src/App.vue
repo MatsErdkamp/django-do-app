@@ -7,8 +7,9 @@ import { RouterLink, RouterView } from "vue-router";
     <RouterLink to="/">Home</RouterLink>
     <RouterLink to="/counter">Counter</RouterLink>
   </nav>
-
-  <RouterView />
+  <main>
+    <RouterView />
+  </main>
 </template>
 
 <style scoped>
@@ -29,7 +30,8 @@ nav {
 }
 
 nav a.router-link-exact-active {
-  color: var(--color-text);
+  color: rgb(12, 104, 190);
+  font-weight: 400;
 }
 
 nav a.router-link-exact-active:hover {
@@ -39,11 +41,6 @@ nav a.router-link-exact-active:hover {
 nav a {
   display: inline-block;
   padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
 }
 
 @media (min-width: 1024px) {
