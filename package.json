@@ -1,7 +1,7 @@
 {
 
   "scripts": {
-    "build:digitalocean": "npm install --production=false && npm run build && npm ci"
+    "build:digitalocean": "cd digital-frontend && npm install --production=false && npm run build && npm ci"
   },
   "dependencies": {
     "whitenoise": "^0.0.1"
