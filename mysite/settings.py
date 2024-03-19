@@ -29,11 +29,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "False") == "True"
-
 DEBUG = True
 
-DEVELOPMENT_MODE = True
+DEVELOPMENT_MODE = os.getenv("DEBUG", "True") == "True"
 
 ALLOWED_HOSTS = ["127.0.0.1", "localhost", "charging-twin-qw8ag.ondigitalocean.app"]
 
