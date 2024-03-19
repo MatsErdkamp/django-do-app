@@ -1,7 +1,11 @@
 <script setup></script>
 
 <template>
-  <h1>hello</h1>
+  <h1 class="hello">hello</h1>
 </template>
 
-<style></style>
+<style>
+.hello {
+  margin-top: 196px;
+}
+</style>

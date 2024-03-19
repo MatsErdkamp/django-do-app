@@ -1,4 +1,8 @@
 {
+
+  "scripts": {
+    "build": "cd digital-frontend && npm run build"
+  },
   "dependencies": {
     "whitenoise": "^0.0.1"
   }

@@ -85,7 +85,7 @@ body {
 
 main {
   display: flex;
-
+  margin-top: 64px;
   justify-content: center;
   height: 100vh;
   overflow-x: hidden;
