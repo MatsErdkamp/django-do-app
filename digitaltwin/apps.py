@@ -1,5 +1,6 @@
 from django.apps import AppConfig
 
 
-class FrontpageConfig(AppConfig):
-    name = 'frontpage'
+class DigitaltwinConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'digitaltwin'

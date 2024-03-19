@@ -13,12 +13,26 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-
+from django.views.static import serve
+from django.urls import include, path, re_path
 from django.contrib import admin
-from django.urls import include, path
+from rest_framework import routers
+from digitaltwin.views import CarList
+import os
+from .settings import BASE_DIR
+
+
+router = routers.DefaultRouter()
+router.register(r'car', CarList)
+
+
 
 urlpatterns = [
-    path("polls/", include("polls.urls")),
     path("admin/", admin.site.urls),
-    path("", include("digitaltwin.urls")),
+    path('api/', include(router.urls)),
+
+    path('api-auth/', include('rest_framework.urls')),
+    re_path(r'^dashboard/$', lambda request: serve(request, 'index.html', os.path.join(BASE_DIR, 'digital-frontend/dist'))),
+    re_path(r'^dashboard/(?P<path>.*)$', serve, {'document_root': os.path.join(BASE_DIR, 'digital-frontend/dist')}),
 ]
+
