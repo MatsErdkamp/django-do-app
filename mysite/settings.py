@@ -35,6 +35,7 @@ DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "True") == "True"
 
 ALLOWED_HOSTS = ["127.0.0.1", "localhost", "charging-twin-qw8ag.ondigitalocean.app"]
 
+CSRF_TRUSTED_ORIGINS = ["127.0.0.1", "localhost", "https://charging-twin-qw8ag.ondigitalocean.app"]
 
 # Application definition
 
