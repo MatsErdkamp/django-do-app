@@ -42,6 +42,7 @@ ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS",
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -49,8 +50,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'rest_framework',
-    "digitaltwin"
+    'digitaltwin',
+    'channels',
+
 ]
+
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -77,7 +81,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [os.path.join(
-    BASE_DIR, 'digital-frontend/dist/')],
+            BASE_DIR, 'digital-frontend/dist/')],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -91,6 +95,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "mysite.wsgi.application"
+ASGI_APPLICATION = 'mysite.asgi.application'
 
 
 # Database
