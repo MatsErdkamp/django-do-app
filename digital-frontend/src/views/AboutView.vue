@@ -6,7 +6,21 @@
 
 
 <script>
-var ws = new WebSocket('ws://127.0.0.1:8000/ws/charging/');
+// Determine the current web protocol
+var wsProtocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+
+// Construct the WebSocket URL based on the current domain
+var wsHost = window.location.host; // Includes hostname and port if specified
+
+if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+  wsHost = 'localhost:8000'
+}
+
+var wsPath = "/ws/charging/";
+var wsURL = wsProtocol + "//" + wsHost + wsPath;
+
+var ws = new WebSocket(wsURL);
+
 
 ws.onmessage = function(e) {
     var data = JSON.parse(e.data);

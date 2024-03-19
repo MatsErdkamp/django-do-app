@@ -2,7 +2,7 @@ import os
 from django.core.asgi import get_asgi_application
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
-import mysite.routing
+import digitaltwin.routing
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mysite.settings')
 
@@ -11,7 +11,7 @@ application = ProtocolTypeRouter({
   # Just HTTP for now. (We can add other protocols later.)
   "websocket": AuthMiddlewareStack(
         URLRouter(
-            mysite.routing.websocket_urlpatterns
+            digitaltwin.routing.websocket_urlpatterns
         )
     ),
 })
