@@ -35,7 +35,7 @@ DEBUG = True
 
 DEVELOPMENT_MODE = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"].append(os.getenv("DJANGO_ALLOWED_HOSTS"))
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", "charging-twin-qw8ag.ondigitalocean.app"]
 
 
 # Application definition
