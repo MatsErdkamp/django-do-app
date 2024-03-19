@@ -76,7 +76,8 @@ ROOT_URLCONF = "mysite.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "templates"), os.path.join(BASE_DIR, "digital-frontend/dist")],
+        "DIRS": [os.path.join(
+    BASE_DIR, 'digital-frontend/dist/')],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -147,9 +148,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 
-
-
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),os.path.join(BASE_DIR, 'digital-frontend/dist/static'))
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"), os.path.join(
+    BASE_DIR, 'digital-frontend/dist/static'))
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
