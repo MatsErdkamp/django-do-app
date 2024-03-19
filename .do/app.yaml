@@ -5,7 +5,7 @@ services:
     repo: digitalocean/sample-django
     branch: static
     deploy_on_push: true
-  run_command: gunicorn --worker-tmp-dir /dev/shm mysite.wsgi
+  run_command: uvicorn mysite.asgi:application --host 0.0.0.0 --port 8000
   envs:
   - key: DISABLE_COLLECTSTATIC
     value: "1"
