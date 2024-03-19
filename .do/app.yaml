@@ -5,7 +5,7 @@ services:
     repo: digitalocean/sample-django
     branch: static
     deploy_on_push: true
-  run_command: gunicorn -w 2 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:8080 --worker-tmp-dir /dev/shm mysite.asgi:application
+  run_command: gunicorn --worker-tmp-dir /dev/shm mysite.wsgi
   envs:
   - key: DISABLE_COLLECTSTATIC
     value: "1"
