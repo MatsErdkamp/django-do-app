@@ -4,8 +4,14 @@ import { RouterLink, RouterView } from "vue-router";
 
 <template>
   <nav>
-    <RouterLink to="/">Home</RouterLink>
-    <RouterLink to="/counter">Counter</RouterLink>
+    <RouterLink to="/charge">
+      <img src="@/assets/svgs/bolt.svg" />
+
+      Charge</RouterLink
+    >
+    <RouterLink to="/counter">
+      <img style="width: 28px" src="@/assets/svgs/counter.svg" />Counter
+    </RouterLink>
   </nav>
   <main>
     <RouterView />
@@ -13,39 +19,46 @@ import { RouterLink, RouterView } from "vue-router";
 </template>
 
 <style scoped>
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
+
 
 nav {
   width: 100%;
   font-size: 12px;
-
   position: fixed;
-  top: 0;
+  bottom: -2px;
   left: 0;
-  padding: 24px 24px;
-  font-size: 1.2em;
+  font-size: 0.8em;
+  background: black;
+  display: flex;
+  border-top: 1px solid #212121;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
+
+
 
 nav a.router-link-exact-active {
-  color: rgb(12, 104, 190);
-  font-weight: 400;
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+  opacity: 1;
+  background: radial-gradient(at center bottom, rgb(40,40,40), transparent 70%);
 }
 
 nav a {
-  display: inline-block;
-  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-direction: column;
+  font-size: 0.8em;
+  opacity: 0.5;
+  color: white;
+  min-width: 60px;
+  flex: 1;
+  padding: 8px 0;
 }
 
-@media (min-width: 1024px) {
-  .logo {
-    margin: 0 2rem 0 0;
-  }
+
+nav a img {
+  width: 28px;
+  margin-bottom: 4px;
 }
+
 </style>
