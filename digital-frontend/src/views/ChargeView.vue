@@ -45,7 +45,7 @@ import ChargeGraph from "@/components/ChargeGraph.vue";
   width: 100%;
   padding: 48px 0;
   height: 20vh;
-  margin-top: 5vh;
+  margin-top: 2vh;
 }
 
 .charging-info-indicator {
@@ -56,7 +56,7 @@ import ChargeGraph from "@/components/ChargeGraph.vue";
   color: black;
   font-weight: 700;
   position: absolute;
-  top: 12vh;
+  top: 10vh;
   transform: translateX(-50%);
   z-index: 0;
 }
@@ -69,7 +69,7 @@ import ChargeGraph from "@/components/ChargeGraph.vue";
   outline: 8px solid rgb(12, 12, 12);
   font-weight: 700;
   position: absolute;
-  top: 12vh;
+  top: 10vh;
   transform: translateX(-50%);
   z-index: -10;
 }
