@@ -39,7 +39,7 @@ nav {
 
 nav a.router-link-exact-active {
   opacity: 1;
-  background: radial-gradient(at center bottom, rgb(40,40,40), transparent 70%);
+  background: radial-gradient(at center bottom, rgb(20,20,20), transparent 50%);
 }
 
 nav a {
