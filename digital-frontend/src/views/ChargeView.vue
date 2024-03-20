@@ -60,7 +60,7 @@ import ChargeGraph from "@/components/ChargeGraph.vue";
   flex-direction: row;
   width: 100%;
   padding: 48px 9vw;
-  height: 20vh;
+  height: 18vh;
   margin-top: 2vh;
 }
 
@@ -76,7 +76,7 @@ import ChargeGraph from "@/components/ChargeGraph.vue";
   color: black;
   font-weight: 700;
   position: absolute;
-  top: 10vh;
+  top: 9vh;
   transform: translateX(-50%);
   z-index: 0;
 }
@@ -89,7 +89,7 @@ import ChargeGraph from "@/components/ChargeGraph.vue";
   outline: 8px solid rgb(0, 0, 0);
   font-weight: 700;
   position: absolute;
-  top: 10vh;
+  top: 9vh;
   transform: translateX(-50%);
   z-index: -10;
 }
@@ -133,12 +133,11 @@ import ChargeGraph from "@/components/ChargeGraph.vue";
 .charge-car-container {
   z-index: 1000;
   position: absolute;
-  margin-top: 20px;
   background: linear-gradient(
     0deg,
     transparent,
     #050505 10%,
-    transparent
+    transparent 60%
   );
 }
 
@@ -153,8 +152,8 @@ import ChargeGraph from "@/components/ChargeGraph.vue";
   top: 0;
   z-index: -1;
   width: 100%;
-  height: 50vh;
-  background: linear-gradient(rgba(36, 187, 86, 0.2), rgba(42, 209, 97, 0));
+  height: 49vh;
+  background: linear-gradient(0deg, rgba(109, 236, 147, 0.4),  rgba(36, 187, 86, 0) 100%);
 }
 
 .charge-graph-container {
