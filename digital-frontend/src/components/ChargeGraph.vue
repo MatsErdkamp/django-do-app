@@ -91,7 +91,7 @@ onMounted(() => {
 .graph-container {
   max-width: 100%;
 
-  height: 20vh;
+  height: 24svh;
   display: flex;
   align-self: center;
 
