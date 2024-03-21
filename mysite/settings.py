@@ -35,36 +35,37 @@ DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "True") == "True"
 
 ALLOWED_HOSTS = ["127.0.0.1", "localhost", "charging-twin-qw8ag.ondigitalocean.app"]
 
-CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1", "http://localhost", "https://charging-twin-qw8ag.ondigitalocean.app"]
+CSRF_TRUSTED_ORIGINS = [
+    "http://127.0.0.1",
+    "http://localhost",
+    "https://charging-twin-qw8ag.ondigitalocean.app",
+]
+
+SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
 # Application definition
 
 INSTALLED_APPS = [
-    'daphne',
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'rest_framework',
-    'digitaltwin',
-    'channels',
-
+    "rest_framework",
+    "digitaltwin",
+    "channels",
 ]
 
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
-    }
-}
+CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
 
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
     ]
 }
 
@@ -84,8 +85,7 @@ ROOT_URLCONF = "mysite.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(
-            BASE_DIR, 'digital-frontend/dist/')],
+        "DIRS": [os.path.join(BASE_DIR, "digital-frontend/dist/")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -99,7 +99,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "mysite.wsgi.application"
-ASGI_APPLICATION = 'mysite.asgi.application'
+ASGI_APPLICATION = "mysite.asgi.application"
 
 
 # Database
@@ -159,6 +159,8 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"), os.path.join(
-    BASE_DIR, 'digital-frontend/dist/static'))
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, "digital-frontend/dist/static"),
+)
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
