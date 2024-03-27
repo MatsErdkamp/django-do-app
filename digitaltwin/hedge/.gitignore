@@ -3,7 +3,6 @@
 *.png
 *.lprof
 *.pstats
-*.txt
 data/*
 !data/hedge_inputs
 data/hedge_inputs/*
