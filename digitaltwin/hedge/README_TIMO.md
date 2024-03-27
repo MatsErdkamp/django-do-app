@@ -1,6 +1,10 @@
 # HEDGE: Home energy data generator
 Contact: Flora Charbonnier, flora.charbonnier@eng.ox.ac.uk
 
+0. maak een virtual environment (belangrijk dattie my_venv heet)
+```sh
+python -m venv my_venv 
+```
 
 1. Activate virtual environment (Zorg dat je terminal in de hedge folder staat): 
 ```sh
