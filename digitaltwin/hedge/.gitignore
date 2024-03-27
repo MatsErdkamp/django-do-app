@@ -12,5 +12,5 @@ data/hedge_inputs/*
 hedge_extra_functions
 previous_results
 *.icloud
-hedge_env
+my_venv
 out_*

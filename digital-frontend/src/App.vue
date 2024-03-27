@@ -9,6 +9,10 @@ import { RouterLink, RouterView } from "vue-router";
 
       Charge</RouterLink
     >
+    <RouterLink to="/dashboard">
+      <img style="width: 28px" src="@/assets/svgs/dashboard.svg" />Dashboard
+    </RouterLink>
+
     <RouterLink to="/counter">
       <img style="width: 28px" src="@/assets/svgs/counter.svg" />Counter
     </RouterLink>

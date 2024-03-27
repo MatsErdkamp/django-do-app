@@ -21,7 +21,8 @@ from data_preparation.importer import import_data
 from data_preparation.parameters import get_parameters
 from data_preparation.scaling_factors import scaling_factors
 
-if __name__ == "__main__":
+
+def prep():
     # 0 - initialise variables
     tic_dtm = datetime.datetime.now()
     prm = get_parameters()
@@ -50,3 +51,7 @@ if __name__ == "__main__":
 
     toc_dtm = datetime.datetime.now()
     print(f"END. Total duration {(toc_dtm - tic_dtm).seconds/60} minutes")
+
+
+if __name__ == "__main__":
+    prep()
