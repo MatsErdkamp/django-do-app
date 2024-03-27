@@ -40,6 +40,9 @@ python3 -m venv my_venv
 8. Activate virtual environment: 
 ```sh
 source my_venv/bin/activate
+
+# WINDOWS: my_venv\Scripts\activate   
+
 ```
 9. Install requirements: 
 ```sh
