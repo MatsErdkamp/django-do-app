@@ -61,15 +61,9 @@ onMounted(() => {
 });
 </script>
 
-<style>
+<style scoped>
 .error {
   color: red;
-}
-
-.calendar-item {
-  border-bottom: 1px solid #212121;
-  padding: 4px 16px;
-  position: relative;
 }
 
 .calendar-item:first-child::after {

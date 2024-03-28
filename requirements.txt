@@ -9,3 +9,4 @@ whitenoise==6.0.0
 djangorestframework==3.15.0
 daphne
 channels
+django-corsheaders
