@@ -1,5 +1,4 @@
-@import './base.css';
-
+@import "./base.css";
 
 a,
 .green {
@@ -7,7 +6,6 @@ a,
   color: var(--color-text);
   transition: 0.4s;
   padding: 3px;
-
 }
 
 button {
@@ -27,10 +25,5 @@ button {
   body {
     display: flex;
     place-items: center;
-  }
-
-  #app {
-
-    padding: 0 2rem;
   }
 }
