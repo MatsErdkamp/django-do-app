@@ -4,13 +4,18 @@
     <div class="charge-histogram">
       <div
         class="price-bar"
-        v-for="bar in bars"
+        v-for="(bar, index) in bars"
         :style="{ height: bar + '%' }"
       ></div>
     </div>
 
     <div class="charge-histogram-charging-indicator">
-      <div class="charge-bar" v-for="bar in bars"></div>
+      <div
+        class="charge-bar"
+        :style="indicatorColor(index, deadlineIndex)"
+        v-for="(bar, index) in bars"
+        @click="clickBar(index)"
+      ></div>
     </div>
   </div>
 </template>
@@ -18,9 +23,25 @@
 <script setup>
 import { onMounted, ref } from "vue";
 
+const deadlineIndex = ref(10);
+
+function indicatorColor(index, compare) {
+  if (index == compare) {
+    return "background:red;";
+  } else if (index > compare) {
+    return "background: #212121;";
+  } else {
+    return "background: #green;";
+  }
+}
+
 const bars = ref([
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 ]);
+
+function clickBar(index) {
+  deadlineIndex.value = index;
+}
 
 onMounted(() => {
   setTimeout(() => {
@@ -56,13 +77,24 @@ onMounted(() => {
   align-self: flex-end;
   min-width: 20px;
   transition: all 330ms ease-in-out;
+  position: relative;
 }
 
 .charge-bar {
   height: 20px;
-  background: rgb(38, 231, 61);
+  background: rgb(26, 167, 42);
   flex: 1;
   border-radius: 8px;
   align-self: flex-end;
+  cursor: pointer;
+}
+
+.charge-deadline {
+  position: absolute;
+  background: rgb(191, 24, 127);
+  width: 100%;
+  top: -32px;
+  height: 20px;
+  border-radius: 12px;
 }
 </style>

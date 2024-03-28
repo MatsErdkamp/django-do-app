@@ -7,6 +7,16 @@
       <div class="calendar-item">
         <h2>38%</h2>
         <div>NOT CONNECTED</div>
+        <h2
+          style="
+            border-top: 1px solid #212121;
+            margin-top: 8px;
+            padding-top: 4px;
+          "
+        >
+          6 Hours
+        </h2>
+        <div>For 80% charge</div>
       </div>
     </div>
   </div>

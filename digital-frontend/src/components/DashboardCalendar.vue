@@ -68,7 +68,7 @@ onMounted(() => {
 
 .calendar-item:first-child::after {
   content: "CHARGING DEADLINE";
-  background: rgb(40, 115, 206);
+  background: rgb(179, 27, 108);
   position: absolute;
   right: 8px;
   top: 12px;

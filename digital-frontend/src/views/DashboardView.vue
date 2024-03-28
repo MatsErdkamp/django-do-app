@@ -38,7 +38,8 @@ import DashboardHistogram from "@/components/DashboardHistogram.vue";
 .dashboard-item h1 {
   color: white;
   text-transform: uppercase;
-  background: #212121;
+  background: #181818;
+  border-bottom: 1px solid #212121;
   font-size: 1.2em;
   font-weight: 600;
   padding: 8px 16px;
