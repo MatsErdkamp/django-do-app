@@ -9,7 +9,7 @@ import random
 
 
 class CarUpdateView(APIView):
-
+    permission_classes = [permissions.AllowAny]
     queryset = Car.objects.all()
 
     def post(self, request, pk):
