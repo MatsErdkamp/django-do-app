@@ -1,7 +1,11 @@
 <template>
   <div class="dashboard-container">
     <DashboardCalendar class="dashboard-item"></DashboardCalendar>
-    <DashboardBattery class="dashboard-item"></DashboardBattery>
+    <DashboardBattery
+      class="dashboard-item"
+      :charge="batteryPercentage"
+      :hours="batteryHours"
+    ></DashboardBattery>
     <DashboardHistogram class="dashboard-item"> </DashboardHistogram>
   </div>
 </template>
@@ -12,9 +16,6 @@ import { onMounted, onUnmounted } from "vue";
 import DashboardCalendar from "@/components/DashboardCalendar.vue";
 import DashboardBattery from "@/components/DashboardBattery.vue";
 import DashboardHistogram from "@/components/DashboardHistogram.vue";
-
-
-
 
 function createWebSocket() {
   // Determine the current web protocol
@@ -46,6 +47,9 @@ let ws = createWebSocket();
 //   ws.send(JSON.stringify({ action: "decrement" }));
 // }
 
+const batteryPercentage = ref(0);
+const batteryHours = ref(0);
+
 onMounted(() => {
   ws.onopen = function () {
     console.log("WebSocket connected.");
@@ -53,9 +57,19 @@ onMounted(() => {
 
   ws.onmessage = function (event) {
     const data = JSON.parse(event.data);
-    console.log(event.data)
+    console.log(event.data);
 
-    
+    let batteryResponseCharge = event.data?.car?.battery_percentage;
+
+    if (batteryResponseCharge != undefined) {
+      batteryPercentage.value = batteryResponseCharge;
+    }
+
+    let batteryResponseHours = event.data?.car?.estimated_time_until_full;
+
+    if (batteryResponseHours != undefined) {
+      batteryHours.value = batteryResponseHours;
+    }
   };
 
   ws.onerror = function (error) {
@@ -70,15 +84,6 @@ onMounted(() => {
 onUnmounted(() => {
   ws.close();
 });
-
-
-
-
-
-
-
-
-
 </script>
 
 <style>

@@ -14,7 +14,7 @@
             padding-top: 4px;
           "
         >
-          6 Hours
+          {{ props.hours }}
         </h2>
         <div>For 80% charge</div>
       </div>
