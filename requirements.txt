@@ -10,3 +10,4 @@ djangorestframework==3.15.0
 daphne
 channels
 django-cors-headers
+requests

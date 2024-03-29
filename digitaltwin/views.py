@@ -134,6 +134,8 @@ def find_best_options(options, deadline, hours):
     return boolean_mask
 
 
+import requests
+
 class CalendarView(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
     serializer_class = CalendarSerializer
@@ -151,7 +153,7 @@ class CalendarView(viewsets.ModelViewSet):
         return queryset
 
     def fetch_and_create_calendar_data(self):
-        import requests
+
 
         url = "https://v1.nocodeapi.com/matser/calendar/SzYJsNehqZHCbDKv/listEvents"
         params = {}
