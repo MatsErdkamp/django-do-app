@@ -33,10 +33,10 @@ class CarUpdateView(APIView):
 
 
         try:
-            percentage = int(self.request.GET.get('battery_percentage', None))
+            percentage = self.request.GET.get('battery_percentage', None)
 
             if percentage != None:
-                car.battery_percentage = percentage
+                car.battery_percentage = int(percentage)
                 car.save()
         except:
             return Response({'message': 'Could not update value'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
