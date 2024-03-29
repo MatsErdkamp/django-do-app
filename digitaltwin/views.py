@@ -27,12 +27,17 @@ class CarUpdateView(APIView):
     def get(self, request, pk):
         try:
             car = Car.objects.get(pk=pk)
-            print(self.request.GET.get('battery_percentage'))
-            car.battery_percentage = int(self.request.GET.get('battery_percentage', 0))
-            car.save()
 
         except Car.DoesNotExist:
             return Response({'message': 'Car not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+        try:
+            car.battery_percentage = int(self.request.GET.get('battery_percentage', 0))
+            car.save()
+        except:
+            return Response({'message': 'Could not update value'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
         serializer = CarSerializer(car, data=request.data, partial=True)
         if serializer.is_valid():
