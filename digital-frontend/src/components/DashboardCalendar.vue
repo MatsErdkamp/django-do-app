@@ -42,16 +42,16 @@ function formatDate(date) {
 
 function getURL(endpoint) {
 
+  let host = "https://charging-twin-qw8ag.ondigitalocean.app"
+
   if (
     window.location.hostname === "localhost" ||
     window.location.hostname === "127.0.0.1"
   ) {
     host = "localhost:8000";
-  } else {
-    host = ''
-  }
+  } 
 
-  return host + endpoint
+  return host + endpoint;
 }
 
 

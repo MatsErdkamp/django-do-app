@@ -31,7 +31,6 @@ function indicatorColor(chargeMask, index) {
     return "background:orange;";
   }
 
-  
   if (chargeMask == false) {
     return "background:red;";
   } else {
@@ -48,21 +47,19 @@ function clickBar(index) {
   fetchCurveData();
 }
 
-
 function getURL(endpoint) {
 
-if (
-  window.location.hostname === "localhost" ||
-  window.location.hostname === "127.0.0.1"
-) {
-  host = "localhost:8000";
-} else {
-  host = ''
-}
+  let host = "https://charging-twin-qw8ag.ondigitalocean.app"
 
-return host + endpoint
-}
+  if (
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
+  ) {
+    host = "localhost:8000";
+  } 
 
+  return host + endpoint;
+}
 
 const scores = ref(null);
 const chargeMask = ref(null);
@@ -70,7 +67,7 @@ const chargeMask = ref(null);
 async function fetchCurveData() {
   loading.value = true;
 
-  let url = getURL("/api/curve/")
+  let url = getURL("/api/curve/");
 
   try {
     const response = await fetch(url + "?deadline=" + deadlineIndex.value);
@@ -82,8 +79,6 @@ async function fetchCurveData() {
     scores.value = data.scores.split(",").map(function (item) {
       return parseInt(item, 10);
     });
-
-
   } catch (err) {
     err.value = err.message;
   } finally {
