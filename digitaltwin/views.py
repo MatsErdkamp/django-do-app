@@ -73,10 +73,18 @@ class ChargeScoresView(APIView):
             data = serializer.data
             data['best_options'] = find_best_options(data['scores'], int(deadline), 7)
 
+            car = Car.objects.get(id=1)
+
             if (data['best_options'][0] == True):
-                Car.objects.get(id=1).charge_state = 'charging'
+                car.charge_state = 'charging'
+
             else:
-                Car.objects.get(id=1).charge_state = 'not charging'
+                car.charge_state = 'not charging'
+
+            car.save()
+
+
+
 
             return Response(data)
         else:
