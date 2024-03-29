@@ -14,7 +14,7 @@
             padding-top: 4px;
           "
         >
-          {{ props.hours }}
+          {{ props.hours }} hours
         </h2>
         <div>For 100% charge</div>
       </div>
@@ -33,7 +33,7 @@ const error = ref(null);
 
 const props = defineProps({
   charge: Number,
-  hours: String
+  hours: Number
 
 })
 

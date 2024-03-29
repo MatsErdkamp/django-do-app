@@ -6,7 +6,8 @@
       :charge="batteryPercentage"
       :hours="batteryHours"
     ></DashboardBattery>
-    <DashboardHistogram class="dashboard-item"> </DashboardHistogram>
+    <DashboardHistogram class="dashboard-item" :hoursRequired="batteryHours">
+    </DashboardHistogram>
   </div>
 </template>
 
@@ -57,7 +58,6 @@ onMounted(() => {
 
   ws.onmessage = function (event) {
     const data = JSON.parse(event.data);
-    
 
     let batteryResponseCharge = data?.car?.battery_percentage;
 
@@ -68,7 +68,9 @@ onMounted(() => {
     let batteryResponseHours = data?.car?.estimated_time_until_full;
 
     if (batteryResponseHours != undefined) {
-      batteryHours.value = batteryResponseHours;
+      let timeString = batteryResponseHours;
+      let hour = parseInt(timeString, 10); // The second parameter 10 specifies the base for parsing.
+      batteryHours.value = hour;
     }
   };
 

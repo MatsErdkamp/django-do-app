@@ -21,10 +21,14 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 
 const deadlineIndex = ref(10);
 const loading = ref(true);
+
+const props = defineProps({
+  hoursRequired: Number,
+});
 
 function indicatorColor(chargeMask, index) {
   if (index == deadlineIndex.value) {
@@ -48,15 +52,14 @@ function clickBar(index) {
 }
 
 function getURL(endpoint) {
-
-  let host = "https://charging-twin-qw8ag.ondigitalocean.app"
+  let host = "https://charging-twin-qw8ag.ondigitalocean.app";
 
   if (
     window.location.hostname === "localhost" ||
     window.location.hostname === "127.0.0.1"
   ) {
     host = "http://localhost:8000";
-  } 
+  }
 
   return host + endpoint;
 }
@@ -64,13 +67,22 @@ function getURL(endpoint) {
 const scores = ref(null);
 const chargeMask = ref(null);
 
+watch(
+  () => props.hoursRequired,
+  (first, second) => {
+    fetchCurveData();
+  }
+);
+
 async function fetchCurveData() {
   loading.value = true;
 
   let url = getURL("/api/curve/");
 
   try {
-    const response = await fetch(url + "?deadline=" + deadlineIndex.value);
+    const response = await fetch(
+      url + "?deadline=" + deadlineIndex.value + "&hours=" + props.hoursRequired
+    );
     if (!response.ok) {
       throw new Error("Failed to fetch");
     }

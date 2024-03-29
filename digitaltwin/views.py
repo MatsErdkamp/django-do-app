@@ -62,6 +62,9 @@ class ChargeScoresView(APIView):
         closest_entry = queryset.first()
 
         deadline = self.request.GET.get('deadline', 5)
+        hours = self.request.GET.get('hours', 5)
+
+        print(hours)
 
         if closest_entry:
             # Serialize the object
@@ -71,7 +74,7 @@ class ChargeScoresView(APIView):
 
 
             data = serializer.data
-            data['best_options'] = find_best_options(data['scores'], int(deadline), 7)
+            data['best_options'] = find_best_options(data['scores'], int(deadline), int(hours))
 
             car = Car.objects.get(id=1)
 
@@ -127,6 +130,17 @@ def find_best_options(options, deadline, hours):
 
     # Create a boolean mask for the original list
     boolean_mask = [x <= threshold for x in options_list]
+
+    positives = 0
+    
+    for (index, item) in enumerate(boolean_mask):
+        if item == True:
+            positives += 1
+        
+        if positives > hours:
+            boolean_mask[index] = False
+
+
 
     # If the boolean mask is shorter than 24, extend it with False values
     boolean_mask.extend([False] * (24 - len(boolean_mask)))
