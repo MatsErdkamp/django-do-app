@@ -84,8 +84,6 @@ class ChargeScoresView(APIView):
             car.save()
 
 
-
-
             return Response(data)
         else:
             return Response({'message': 'No entries found'}, status=404)

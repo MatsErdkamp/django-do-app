@@ -15,11 +15,11 @@ class CarSerializer(serializers.ModelSerializer):
         hours_until_full = percentage_needed // 10
         instance.estimated_time_until_full = timedelta(hours=hours_until_full)
         
-        # Update charge state based on new battery percentage
-        if instance.battery_percentage >= 100:
-            instance.charge_state = 'full'
-        else:
-            instance.charge_state = 'charging'
+        # # Update charge state based on new battery percentage
+        # if instance.battery_percentage >= 100:
+        #     instance.charge_state = 'full'
+        # else:
+        #     instance.charge_state = 'charging'
         
         instance.save()
         return instance
