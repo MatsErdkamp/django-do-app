@@ -5,7 +5,7 @@
     <div v-else-if="error" class="error">{{ error }}</div>
     <div v-else>
       <div class="calendar-item">
-        <h2>{{ props.charge }}</h2>
+        <h2>{{ props.charge }}%</h2>
         <div>NOT CONNECTED</div>
         <h2
           style="
@@ -16,7 +16,7 @@
         >
           {{ props.hours }}
         </h2>
-        <div>For 80% charge</div>
+        <div>For 100% charge</div>
       </div>
     </div>
   </div>
