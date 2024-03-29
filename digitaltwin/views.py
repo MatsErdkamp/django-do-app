@@ -24,6 +24,22 @@ class CarUpdateView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def get(self, request, pk):
+        try:
+            car = Car.objects.get(pk=pk)
+            print(self.request.GET.get('battery_percentage'))
+            car.battery_percentage = int(self.request.GET.get('battery_percentage', 0))
+            car.save()
+
+        except Car.DoesNotExist:
+            return Response({'message': 'Car not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = CarSerializer(car, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class RandomNumbersView(APIView):
 
