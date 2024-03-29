@@ -4,6 +4,7 @@ from channels.db import database_sync_to_async
 from .models import Counter, Car
 from .serializers import CarSerializer
 
+
 class CarConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         # Name of the group for broadcasting messages
@@ -36,11 +37,11 @@ class CarConsumer(AsyncWebsocketConsumer):
     async def send_update(self):
         # Send message to WebSocket client
         car_data = await self.serialize_car(self.car)
-        
 
-        await self.send(text_data=json.dumps(
-           car_data
-        ))
+        # Send message to WebSocket
+        await self.send(text_data=json.dumps({
+            'car': car_data
+        }))
 
     @database_sync_to_async
     def serialize_car(self, car):
