@@ -1,11 +1,43 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView
-from django.http import HttpResponse
-from django.template import loader
-from django.views import generic
 from .models import Car, Calendar
 from rest_framework import permissions, viewsets
 from .serializers import CarSerializer, CalendarSerializer
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+import random
+
+
+class CarUpdateView(APIView):
+
+    queryset = Car.objects.all()
+
+    def post(self, request, pk):
+        try:
+            car = Car.objects.get(pk=pk)
+        except Car.DoesNotExist:
+            return Response({'message': 'Car not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = CarSerializer(car, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class RandomNumbersView(APIView):
+
+    queryset = Calendar.objects.all()  # REPLACE
+    """
+    API endpoint that returns a list of 24 random numbers between 0 and 100.
+    """
+    def get(self, request, *args, **kwargs):
+        # Generate a list of 24 random numbers between 0 and 100
+        random_numbers = [random.randint(0, 100) for _ in range(24)]
+        
+        # Return the list as a JSON response
+        return Response(random_numbers, status=status.HTTP_200_OK)
+
 
 
 class CalendarView(viewsets.ModelViewSet):

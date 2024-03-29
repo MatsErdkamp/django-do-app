@@ -7,9 +7,78 @@
 </template>
 
 <script setup>
+import { onMounted, onUnmounted } from "vue";
+
 import DashboardCalendar from "@/components/DashboardCalendar.vue";
 import DashboardBattery from "@/components/DashboardBattery.vue";
 import DashboardHistogram from "@/components/DashboardHistogram.vue";
+
+
+
+
+function createWebSocket() {
+  // Determine the current web protocol
+  var wsProtocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+
+  // Construct the WebSocket URL based on the current domain
+  var wsHost = window.location.host; // Includes hostname and port if specified
+
+  if (
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
+  ) {
+    wsHost = "localhost:8000";
+  }
+
+  var wsPath = "/ws/car/";
+  var wsURL = wsProtocol + "//" + wsHost + wsPath;
+
+  return new WebSocket(wsURL);
+}
+
+let ws = createWebSocket();
+
+// function increment() {
+//   ws.send(JSON.stringify({ action: "increment" }));
+// }
+
+// function decrement() {
+//   ws.send(JSON.stringify({ action: "decrement" }));
+// }
+
+onMounted(() => {
+  ws.onopen = function () {
+    console.log("WebSocket connected.");
+  };
+
+  ws.onmessage = function (event) {
+    const data = JSON.parse(event.data);
+    console.log(event.data)
+
+    
+  };
+
+  ws.onerror = function (error) {
+    console.log("WebSocket Error: ", error);
+  };
+
+  ws.onclose = function (event) {
+    console.log("WebSocket closed.");
+  };
+});
+
+onUnmounted(() => {
+  ws.close();
+});
+
+
+
+
+
+
+
+
+
 </script>
 
 <style>

@@ -54,6 +54,8 @@ onMounted(() => {
 
   ws.onmessage = function (event) {
     const data = JSON.parse(event.data);
+    console.log(event.data)
+
     count.value = data.count;
   };
 

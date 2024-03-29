@@ -5,7 +5,7 @@
     <div v-else-if="error" class="error">{{ error }}</div>
     <div v-else>
       <div class="calendar-item">
-        <h2>38%</h2>
+        <h2>{{ props.charge }}</h2>
         <div>NOT CONNECTED</div>
         <h2
           style="
@@ -28,6 +28,15 @@ import { ref, onMounted } from "vue";
 const batteryData = ref(null);
 const loading = ref(false);
 const error = ref(null);
+
+
+
+const props = defineProps({
+  charge: Number,
+  hours: Number
+
+})
+
 
 async function fetchCalendarData() {
   loading.value = true;

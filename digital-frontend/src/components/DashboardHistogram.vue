@@ -24,6 +24,7 @@
 import { onMounted, ref } from "vue";
 
 const deadlineIndex = ref(10);
+const loading = ref(true);
 
 function indicatorColor(index, compare) {
   if (index == compare) {
@@ -43,13 +44,25 @@ function clickBar(index) {
   deadlineIndex.value = index;
 }
 
+
+async function fetchCalendarData() {
+  loading.value = true;
+  try {
+    const response = await fetch("http://127.0.0.1:8000/api/curve/");
+    if (!response.ok) {
+      throw new Error("Failed to fetch");
+    }
+    const data = await response.json();
+    bars.value = data;
+  } catch (err) {
+    error.value = err.message;
+  } finally {
+    loading.value = false;
+  }
+}
+
 onMounted(() => {
-  setTimeout(() => {
-    bars.value = [
-      20, 40, 60, 70, 80, 100, 20, 30, 20, 40, 60, 70, 80, 100, 20, 30, 20, 40,
-      60, 70, 80, 100, 20, 30,
-    ];
-  }, 200);
+  fetchCalendarData();
 });
 </script>
 

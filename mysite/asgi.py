@@ -9,7 +9,7 @@ from mysite.wsgi import *
 
 django_asgi_app = get_asgi_application()
 
-from digitaltwin.consumers import CounterConsumer
+from digitaltwin.consumers import CounterConsumer, CarConsumer
 
 application = ProtocolTypeRouter(
     {
@@ -21,6 +21,7 @@ application = ProtocolTypeRouter(
                 URLRouter(
                     [
                         path("ws/counter/", CounterConsumer.as_asgi()),
+                        path("ws/car/", CarConsumer.as_asgi()),
                     ]
                 )
             ),

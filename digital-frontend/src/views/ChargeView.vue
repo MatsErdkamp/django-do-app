@@ -45,6 +45,8 @@
 
 <script setup>
 import ChargeGraph from "@/components/ChargeGraph.vue";
+
+
 </script>
 
 <style scoped>

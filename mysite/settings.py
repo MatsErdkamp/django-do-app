@@ -61,6 +61,7 @@ INSTALLED_APPS = [
 
 CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
 
+
 CORS_ALLOW_ALL_ORIGINS = True
 
 REST_FRAMEWORK = {
