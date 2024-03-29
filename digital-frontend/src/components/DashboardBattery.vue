@@ -33,7 +33,7 @@ const error = ref(null);
 
 const props = defineProps({
   charge: Number,
-  hours: Number
+  hours: String
 
 })
 

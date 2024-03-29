@@ -57,15 +57,15 @@ onMounted(() => {
 
   ws.onmessage = function (event) {
     const data = JSON.parse(event.data);
-    console.log(event.data);
+    
 
-    let batteryResponseCharge = event.data?.car?.battery_percentage;
+    let batteryResponseCharge = data?.car?.battery_percentage;
 
     if (batteryResponseCharge != undefined) {
       batteryPercentage.value = batteryResponseCharge;
     }
 
-    let batteryResponseHours = event.data?.car?.estimated_time_until_full;
+    let batteryResponseHours = data?.car?.estimated_time_until_full;
 
     if (batteryResponseHours != undefined) {
       batteryHours.value = batteryResponseHours;
