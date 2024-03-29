@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 
 import DashboardCalendar from "@/components/DashboardCalendar.vue";
 import DashboardBattery from "@/components/DashboardBattery.vue";
