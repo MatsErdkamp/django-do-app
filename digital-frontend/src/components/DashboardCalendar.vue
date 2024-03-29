@@ -48,7 +48,7 @@ function getURL(endpoint) {
     window.location.hostname === "localhost" ||
     window.location.hostname === "127.0.0.1"
   ) {
-    host = "localhost:8000";
+    host = "http://localhost:8000";
   } 
 
   return host + endpoint;
@@ -58,7 +58,7 @@ function getURL(endpoint) {
 async function fetchCalendarData() {
   loading.value = true;
 
-  let url = getURL('/api/calendar')
+  let url = getURL('/api/calendar/')
 
   try {
     const response = await fetch(url);

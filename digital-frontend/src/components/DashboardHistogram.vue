@@ -55,7 +55,7 @@ function getURL(endpoint) {
     window.location.hostname === "localhost" ||
     window.location.hostname === "127.0.0.1"
   ) {
-    host = "localhost:8000";
+    host = "http://localhost:8000";
   } 
 
   return host + endpoint;
