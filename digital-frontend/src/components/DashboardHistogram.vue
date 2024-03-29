@@ -4,7 +4,7 @@
     <div class="charge-histogram">
       <div
         class="price-bar"
-        v-for="(bar, index) in bars"
+        v-for="(bar, index) in scores"
         :style="{ height: bar + '%' }"
       ></div>
     </div>
@@ -12,8 +12,8 @@
     <div class="charge-histogram-charging-indicator">
       <div
         class="charge-bar"
-        :style="indicatorColor(index, deadlineIndex)"
-        v-for="(bar, index) in bars"
+        :style="indicatorColor(bool, index)"
+        v-for="(bool, index) in chargeMask"
         @click="clickBar(index)"
       ></div>
     </div>
@@ -26,13 +26,16 @@ import { onMounted, ref } from "vue";
 const deadlineIndex = ref(10);
 const loading = ref(true);
 
-function indicatorColor(index, compare) {
-  if (index == compare) {
+function indicatorColor(chargeMask, index) {
+  if (index == deadlineIndex.value) {
+    return "background:orange;";
+  }
+
+  
+  if (chargeMask == false) {
     return "background:red;";
-  } else if (index > compare) {
-    return "background: #212121;";
   } else {
-    return "background: #green;";
+    return "background:green;";
   }
 }
 
@@ -42,27 +45,35 @@ const bars = ref([
 
 function clickBar(index) {
   deadlineIndex.value = index;
+  fetchCurveData();
 }
 
+const scores = ref(null);
+const chargeMask = ref(null);
 
-async function fetchCalendarData() {
+async function fetchCurveData() {
   loading.value = true;
   try {
-    const response = await fetch("http://127.0.0.1:8000/api/curve/");
+    const response = await fetch("http://127.0.0.1:8000/api/curve/?deadline=" + deadlineIndex.value);
     if (!response.ok) {
       throw new Error("Failed to fetch");
     }
     const data = await response.json();
-    bars.value = data;
+    chargeMask.value = data.best_options;
+    scores.value = data.scores.split(",").map(function (item) {
+      return parseInt(item, 10);
+    });
+
+
   } catch (err) {
-    error.value = err.message;
+    err.value = err.message;
   } finally {
     loading.value = false;
   }
 }
 
 onMounted(() => {
-  fetchCalendarData();
+  fetchCurveData();
 });
 </script>
 

@@ -1,11 +1,16 @@
 from django.db import models
-
+from django.core.validators import int_list_validator
 # Create your models here.
 
 
 class Calendar(models.Model):
 
     google_response = models.JSONField()
+
+
+class ChargeTimeScores(models.Model):
+    day = models.DateField(unique=True)
+    scores = models.CharField(validators=[int_list_validator], max_length=200, default='')
 
 
 class Car(models.Model):
@@ -22,6 +27,7 @@ class Car(models.Model):
     estimated_time_until_full = (
         models.DurationField()
     )
+
 
 
 class Counter(models.Model):

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Car, Calendar
+from .models import Car, Calendar, ChargeTimeScores
 from datetime import timedelta
 
 class CarSerializer(serializers.ModelSerializer):
@@ -23,6 +23,12 @@ class CarSerializer(serializers.ModelSerializer):
         
         instance.save()
         return instance
+
+
+class ChargeTimeScoresSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChargeTimeScores
+        fields = "__all__"
 
 
 class CalendarSerializer(serializers.HyperlinkedModelSerializer):

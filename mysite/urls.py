@@ -18,7 +18,7 @@ from django.views.static import serve
 from django.urls import include, path, re_path
 from django.contrib import admin
 from rest_framework import routers
-from digitaltwin.views import CarList, CalendarView, RandomNumbersView, CarUpdateView
+from digitaltwin.views import CarList, CalendarView, ChargeScoresView, CarUpdateView
 import os
 from .settings import BASE_DIR
 from django.views.generic import TemplateView
@@ -32,7 +32,7 @@ router.register(r"calendar", CalendarView)
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('api/cars/<int:pk>/update/', CarUpdateView.as_view(), name='car-update'),
-    path("api/curve/", RandomNumbersView.as_view(), name='random-numbers'),
+    path("api/curve/", ChargeScoresView.as_view(), name='random-numbers'),
     path("api/", include(router.urls)),
     path("api-auth/", include("rest_framework.urls")),
     path("", TemplateView.as_view(template_name="index.html")),
