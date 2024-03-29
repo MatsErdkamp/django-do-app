@@ -77,9 +77,10 @@ class ChargeScoresView(APIView):
 
             if (data['best_options'][0] == True):
                 car.charge_state = 'charging'
-
             else:
                 car.charge_state = 'not charging'
+
+
 
             car.save()
 

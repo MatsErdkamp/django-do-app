@@ -48,13 +48,32 @@ function clickBar(index) {
   fetchCurveData();
 }
 
+
+function getURL(endpoint) {
+
+if (
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1"
+) {
+  host = "localhost:8000";
+} else {
+  host = ''
+}
+
+return host + endpoint
+}
+
+
 const scores = ref(null);
 const chargeMask = ref(null);
 
 async function fetchCurveData() {
   loading.value = true;
+
+  let url = getURL("/api/curve/")
+
   try {
-    const response = await fetch("http://127.0.0.1:8000/api/curve/?deadline=" + deadlineIndex.value);
+    const response = await fetch(url + "?deadline=" + deadlineIndex.value);
     if (!response.ok) {
       throw new Error("Failed to fetch");
     }
