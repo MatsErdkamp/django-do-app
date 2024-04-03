@@ -35,13 +35,24 @@ class CarUpdateView(APIView):
 
 
         try:
-            percentage = self.request.GET.get('battery_percentage', None)
+            percentage = self.request.GET.get('car_state', None)
 
             if percentage != None:
-                car.battery_percentage = int(percentage)
+                car.charge_state
                 car.save()
         except:
-            return Response({'message': 'Could not update value'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'message': 'Could not update charge state'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+        # try:
+        #     percentage = self.request.GET.get('battery_percentage', None)
+
+        #     if percentage != None:
+        #         car.battery_percentage = int(percentage)
+        #         car.save()
+        # except:
+        #     return Response({'message': 'Could not update value'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
         serializer = CarSerializer(car, data=request.data, partial=True)

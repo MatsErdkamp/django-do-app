@@ -11,22 +11,30 @@
       <div class="deadline-clock">{{ chargeDeadline }}</div>
       <div class="charge-deadline">charge deadline for 'work'</div>
 
-      <div class="charge-indicator" v-if="charging == true">charging 54%</div>
-      <div class="charge-indicator" style="background:#c71d3b" v-else>Not Charging 54%</div>
+      <Transition mode="out-in" name="fade">
+        <div class="charge-indicator" v-if="carFound == false" style="background: #c71d3b" >Car not Connected</div>
+        <div class="charge-indicator" v-else-if="charging == true">Charging 54%</div>
+        <div class="charge-indicator" v-else style="background: #e49623" >
+          Not Charging 54%
+        </div>
+      </Transition>
     </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 
 // Reactive value for chargeDeadline
 
-const currentTime = ref("11:");
 const chargeDeadline = ref("14:00");
 const rotation = ref(0); // Initial rotation in degrees
 
-const charging = ref(false)
+
+
+const charging = ref(false);
+const carFound = ref(false);
+
 
 onMounted(() => {
   fetchCurveData();
@@ -204,8 +212,6 @@ function handleRotation() {
     // Prevent default action for the event to avoid potential scrolling or other touch actions
     event.preventDefault();
 
-
-
     isDragging = true;
     const rect = rotatingDial.value.getBoundingClientRect();
     let clientX = event.clientX;
@@ -302,7 +308,6 @@ function debounceFetchCurveData() {
   }, 100); // Debounce time of 200ms
 }
 
-
 let deadlineOffset = 5;
 
 const loading = ref(true);
@@ -332,10 +337,10 @@ async function fetchCurveData() {
       chargeData[index].colorState = isActive ? "#22e66a" : "#212121";
     });
 
-    if ( chargeMask[0] == true ){ 
-        charging.value = true;
+    if (chargeMask[0] == true) {
+      charging.value = true;
     } else {
-        charging.value = false;
+      charging.value = false;
     }
 
     // Call this function whenever you need to update the chart's color states
@@ -367,6 +372,89 @@ let chargeMask = [
 function updateColorStatesAndRefreshData(series, newData) {
   series.data.setAll(newData);
 }
+
+
+
+
+// --------------------- WEBSOCKETS ----------------------------
+// ---------------------------------
+// ---------------------------------
+// ---------------------------------
+
+
+
+function createWebSocket() {
+  // Determine the current web protocol
+  var wsProtocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+
+  // Construct the WebSocket URL based on the current domain
+  var wsHost = window.location.host; // Includes hostname and port if specified
+
+  if (
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
+  ) {
+    wsHost = "localhost:8000";
+  }
+
+  var wsPath = "/ws/car/";
+  var wsURL = wsProtocol + "//" + wsHost + wsPath;
+
+  return new WebSocket(wsURL);
+}
+
+let ws = createWebSocket();
+
+// function increment() {
+//   ws.send(JSON.stringify({ action: "increment" }));
+// }
+
+// function decrement() {
+//   ws.send(JSON.stringify({ action: "decrement" }));
+// }
+
+const batteryPercentage = ref(0);
+const batteryHours = ref(0);
+
+onMounted(() => {
+  ws.onopen = function () {
+    console.log("WebSocket connected.");
+  };
+
+  ws.onmessage = function (event) {
+    const data = JSON.parse(event.data);
+
+    let batteryResponseCharge = data?.car?.battery_percentage;
+
+    if (batteryResponseCharge != undefined) {
+      batteryPercentage.value = batteryResponseCharge;
+    }
+
+    let batteryResponseHours = data?.car?.estimated_time_until_full;
+
+    if (batteryResponseHours != undefined) {
+      let timeString = batteryResponseHours;
+      let hour = parseInt(timeString, 10); // The second parameter 10 specifies the base for parsing.
+      batteryHours.value = hour;
+    }
+  };
+
+  ws.onerror = function (error) {
+    console.log("WebSocket Error: ", error);
+  };
+
+  ws.onclose = function (event) {
+    console.log("WebSocket closed.");
+  };
+});
+
+onUnmounted(() => {
+  ws.close();
+});
+
+
+
+
 </script>
 
 <style>
@@ -391,7 +479,13 @@ function updateColorStatesAndRefreshData(series, newData) {
   top: 18%;
   left: 18%;
   border-radius: 50%;
-  background: conic-gradient(transparent 0%, #fff 0.1%, #fff 4%, transparent 4.1%, transparent);
+  background: conic-gradient(
+    transparent 0%,
+    #fff 0.1%,
+    #fff 4%,
+    transparent 4.1%,
+    transparent
+  );
   z-index: 1;
 }
 
@@ -402,12 +496,17 @@ function updateColorStatesAndRefreshData(series, newData) {
   top: 18%;
   left: 18%;
   border-radius: 50%;
-  background: conic-gradient(#121212 0%, #e49623 0.1%, #e49623 2%, #121212 2.1%, #121212);
+  background: conic-gradient(
+    #121212 0%,
+    #e49623 0.1%,
+    #e49623 2%,
+    #121212 2.1%,
+    #121212
+  );
   rotate: 80deg;
   pointer-events: none;
   z-index: 0;
 }
-
 
 .circle-inside {
   position: absolute;
@@ -415,7 +514,7 @@ function updateColorStatesAndRefreshData(series, newData) {
   height: 56%;
   top: 22%;
   left: 22%;
-    z-index: 2;
+  z-index: 2;
   background: rgb(0, 0, 0);
   display: flex;
   align-items: center;
@@ -451,4 +550,17 @@ function updateColorStatesAndRefreshData(series, newData) {
   margin-bottom: 24px;
   font-size: 1.4em;
 }
+
+
+/* we will explain what these classes do next! */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 330ms ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
 </style>

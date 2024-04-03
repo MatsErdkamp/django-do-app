@@ -27,6 +27,7 @@ class Car(models.Model):
     estimated_time_until_full = (
         models.DurationField()
     )
+    last_update = models.DateTimeField(auto_now=True)  # Automatically updates to current date and time on save
 
 
 
