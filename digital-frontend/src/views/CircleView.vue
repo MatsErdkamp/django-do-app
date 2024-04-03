@@ -3,6 +3,7 @@
     <div id="chartdiv"></div>
 
     <div class="rotating-dial"></div>
+    <div class="rotating-dial-2"></div>
 
     <div class="circle-inside">
       <div class="clock">{{ new Date().toLocaleTimeString() }}</div>
@@ -203,6 +204,8 @@ function handleRotation() {
     // Prevent default action for the event to avoid potential scrolling or other touch actions
     event.preventDefault();
 
+
+
     isDragging = true;
     const rect = rotatingDial.value.getBoundingClientRect();
     let clientX = event.clientX;
@@ -388,8 +391,23 @@ function updateColorStatesAndRefreshData(series, newData) {
   top: 18%;
   left: 18%;
   border-radius: 50%;
-  background: conic-gradient(#fff 0%, #fff 4%, #121212 4%, #121212);
+  background: conic-gradient(transparent 0%, #fff 0.1%, #fff 4%, transparent 4.1%, transparent);
+  z-index: 1;
 }
+
+.rotating-dial-2 {
+  position: absolute;
+  width: 64%;
+  height: 64%;
+  top: 18%;
+  left: 18%;
+  border-radius: 50%;
+  background: conic-gradient(#121212 0%, #e49623 0.1%, #e49623 2%, #121212 2.1%, #121212);
+  rotate: 80deg;
+  pointer-events: none;
+  z-index: 0;
+}
+
 
 .circle-inside {
   position: absolute;
@@ -397,7 +415,7 @@ function updateColorStatesAndRefreshData(series, newData) {
   height: 56%;
   top: 22%;
   left: 22%;
-
+    z-index: 2;
   background: rgb(0, 0, 0);
   display: flex;
   align-items: center;
