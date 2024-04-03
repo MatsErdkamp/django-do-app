@@ -53,9 +53,6 @@ class CarUpdateView(APIView):
                     car.charge_target_hours += 1
                 elif charge_target_hours == 'decrease':
                     car.charge_target_hours -= 1
-            else:
-                car.charge_target_hours -= 1
-
                 car.save()
 
         except:
