@@ -2,6 +2,8 @@
   <div class="circle-container">
     <div id="chartdiv"></div>
 
+    
+    <div class="background-dial"></div>
     <div class="rotating-dial"></div>
     <div class="rotating-dial-2"></div>
 
@@ -474,6 +476,18 @@ onUnmounted(() => {
   margin: -7%;
 }
 
+.background-dial {
+  position: absolute;
+  width: 64%;
+  height: 64%;
+  top: 18%;
+  left: 18%;
+  border-radius: 50%;
+  background: #121212;
+  pointer-events: none;
+
+}
+
 .rotating-dial {
   position: absolute;
   width: 64%;
@@ -489,25 +503,26 @@ onUnmounted(() => {
     transparent
   );
   z-index: 1;
+
 }
 
 .rotating-dial-2 {
   position: absolute;
-  width: 64%;
-  height: 64%;
-  top: 18%;
-  left: 18%;
+  width: 60%;
+  height: 60%;
+  top: 20%;
+  left: 20%;
   border-radius: 50%;
   background: conic-gradient(
-    #121212 0%,
-    #e49623 0.1%,
-    #e49623 2%,
-    #121212 2.1%,
-    #121212
+    transparent 0%,
+    #d423e4 0.1%,
+    #d423e4 4.0%,
+    transparent 4.1%,
+    transparent
   );
   rotate: 80deg;
   pointer-events: none;
-  z-index: 0;
+  z-index: 3;
 }
 
 .circle-inside {
@@ -516,7 +531,7 @@ onUnmounted(() => {
   height: 56%;
   top: 22%;
   left: 22%;
-  z-index: 2;
+  z-index: 120;
   background: rgb(0, 0, 0);
   display: flex;
   align-items: center;
