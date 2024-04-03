@@ -302,31 +302,33 @@ function handleRotation() {
   position: relative;
   background: rgb(0, 0, 0);
   overflow: hidden;
+
 }
 
 #chartdiv {
-  width: 100%;
-  height: 100%;
-  scale: 1.15;
+  width: 114%;
+  height: 114%;
+    margin: -7%;
 }
 
 .rotating-dial {
   position: absolute;
-  width: 56%;
-  height: 56%;
-  top: 22%;
-  left: 22%;
+  width: 64%;
+  height: 64%;
+  top: 18%;
+  left: 18%;
   border-radius: 50%;
   background: conic-gradient(#fff 0%, #fff 4%, #121212 4%, #121212);
+
 
 }
 
 .circle-inside {
   position: absolute;
-  width: 50%;
-  height: 50%;
-  top: 25%;
-  left: 25%;
+  width: 56%;
+  height: 56%;
+  top: 22%;
+  left: 22%;
 
   background: rgb(0, 0, 0);
   display: flex;
@@ -336,6 +338,7 @@ function handleRotation() {
   border-radius: 50%;
   user-select: none;
   pointer-events: none;
+
 }
 
 .clock {
