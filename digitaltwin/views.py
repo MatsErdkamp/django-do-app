@@ -1,3 +1,4 @@
+import requests
 from django.shortcuts import render
 from .models import Car, Calendar, ChargeTimeScores
 from rest_framework import permissions, viewsets
@@ -10,6 +11,7 @@ from django.db.models.functions import Now
 from django.db.models import F, ExpressionWrapper, fields
 import json
 from datetime import datetime
+
 
 class CarUpdateView(APIView):
     permission_classes = [permissions.AllowAny]
@@ -34,7 +36,6 @@ class CarUpdateView(APIView):
         except Car.DoesNotExist:
             return Response({'message': 'Car not found'}, status=status.HTTP_404_NOT_FOUND)
 
-
         try:
             state = self.request.GET.get('car_state', None)
 
@@ -43,22 +44,22 @@ class CarUpdateView(APIView):
                 car.last_update = datetime.now()
                 car.save()
 
-            charge_target_hours = self.request.GET.get('charge_target_hours', None)
+            charge_target_hours = self.request.GET.get(
+                'charge_target_hours', None)
 
             if charge_target_hours != None:
-    
-                if (charge_target_hours == 'increase'):
-                    car.charge_target_hours += 1
-                else:
-                    car.charge_target_hours -= 1
-                
-                car.save()
 
+                if charge_target_hours == 'increase':
+                    car.charge_target_hours += 1
+                elif charge_target_hours == 'decrease':
+                    car.charge_target_hours -= 1
+            else:
+                car.charge_target_hours -= 1
+
+                car.save()
 
         except:
             return Response({'message': 'Could not update charge state'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
 
         # try:
         #     percentage = self.request.GET.get('battery_percentage', None)
@@ -68,7 +69,6 @@ class CarUpdateView(APIView):
         #         car.save()
         # except:
         #     return Response({'message': 'Could not update value'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 
         serializer = CarSerializer(car, data=request.data, partial=True)
         if serializer.is_valid():
@@ -82,7 +82,6 @@ class ChargeScoresView(APIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = ChargeTimeScores
 
-
     def get(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         closest_entry = queryset.first()
@@ -94,13 +93,13 @@ class ChargeScoresView(APIView):
 
         if closest_entry:
             # Serialize the object
-            serializer = ChargeTimeScoresSerializer(closest_entry, context={'request': request})
+            serializer = ChargeTimeScoresSerializer(
+                closest_entry, context={'request': request})
             # Return a Response object with the serialized data
 
-
-
             data = serializer.data
-            data['best_options'] = find_best_options(data['scores'], int(deadline), int(hours))
+            data['best_options'] = find_best_options(
+                data['scores'], int(deadline), int(hours))
 
             car = Car.objects.get(id=1)
 
@@ -109,10 +108,7 @@ class ChargeScoresView(APIView):
             else:
                 car.charge_state = 'not charging'
 
-
-
             car.save()
-
 
             return Response(data)
         else:
@@ -143,10 +139,10 @@ class ChargeScoresView(APIView):
 def find_best_options(options, deadline, hours):
     # Assuming options is a list of integers, convert it to integers if it's in string format
     options_list = [int(x) for x in options.split(',')][:deadline]
-    
+
     # Sort the options list to find the lowest [hours] amount of numbers
     sorted_options = sorted(options_list)
-    
+
     # Get the threshold value which is the highest among the lowest [hours] numbers
     if hours < len(sorted_options):
         threshold = sorted_options[hours-1]
@@ -158,23 +154,19 @@ def find_best_options(options, deadline, hours):
     boolean_mask = [x <= threshold for x in options_list]
 
     positives = 0
-    
+
     for (index, item) in enumerate(boolean_mask):
         if item == True:
             positives += 1
-        
+
         if positives > hours:
             boolean_mask[index] = False
-
-
 
     # If the boolean mask is shorter than 24, extend it with False values
     boolean_mask.extend([False] * (24 - len(boolean_mask)))
 
     return boolean_mask
 
-
-import requests
 
 class CalendarView(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
@@ -193,7 +185,6 @@ class CalendarView(viewsets.ModelViewSet):
         return queryset
 
     def fetch_and_create_calendar_data(self):
-
 
         url = "https://v1.nocodeapi.com/matser/calendar/SzYJsNehqZHCbDKv/listEvents"
         params = {}
