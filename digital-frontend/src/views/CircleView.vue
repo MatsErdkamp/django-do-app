@@ -436,6 +436,8 @@ onMounted(() => {
   ws.onmessage = function (event) {
     const data = JSON.parse(event.data);
 
+    console.log(event.data)
+
     let batteryResponseCharge = data?.car?.battery_percentage;
 
     if (batteryResponseCharge != undefined) {

@@ -10,7 +10,7 @@ import json
 @receiver(post_delete, sender=Car)
 def car_updated(sender, instance, **kwargs):
     """
-    Signal handler to be called whenever a Counter object is saved or deleted.
+    Signal handler to be called whenever a Car object is saved or deleted.
     """
 
     channel_layer = get_channel_layer()
