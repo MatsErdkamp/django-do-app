@@ -410,6 +410,8 @@ function setDialToDeadlineOffset(deadlineOffset) {
     targetHours += 24;
   }
 
+  chargeDeadline.value = `${targetHours}:00`
+
   // Convert hours back to angle. The reverse of the original hours calculation
   let angle = (targetHours - currentTime) * 14.5;
 
