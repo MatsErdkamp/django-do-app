@@ -42,6 +42,19 @@ class CarUpdateView(APIView):
                 car.car_state = state
                 car.last_update = datetime.now()
                 car.save()
+
+            charge_target_hours = self.request.GET.get('charge_target_hours', None)
+
+            if charge_target_hours != None:
+    
+                if (charge_target_hours == 'increase'):
+                    car.charge_target_hours += 1
+                else:
+                    car.charge_target_hours -= 1
+                
+                car.save()
+
+
         except:
             return Response({'message': 'Could not update charge state'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
