@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import ChargeView from '../views/ChargeView.vue'
+import CircleView from '../views/CircleView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -9,6 +10,11 @@ const router = createRouter({
       path: '/',
       name: 'charge',
       component: ChargeView
+    },
+    {
+      path: '/circle',
+      name: 'circle',
+      component: CircleView
     },
     {
       path: '/dashboard',
