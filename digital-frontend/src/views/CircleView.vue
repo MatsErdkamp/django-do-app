@@ -216,12 +216,19 @@ function handleRotation() {
       event.clientX - centerX
     );
     const deltaAngle = currentAngle - startAngle;
-    rotation.value += deltaAngle * (180 / Math.PI);
+    rotation.value += deltaAngle * (180 / Math.PI) ;
     rotatingDial.value.style.transform = `rotate(${rotation.value}deg)`;
+
+
+    let val = rotation.value
+
+    if (val < 0) {
+        val = 360 + val
+    }
 
     // Simplified update of chargeDeadline based on rotation
     // You may want to adjust this calculation
-    const hours = Math.floor((rotation.value % 360) / 15);
+    const hours = Math.floor((val % 350) / 14.5);
     chargeDeadline.value = `${hours}:00`;
 
     startAngle = currentAngle;
