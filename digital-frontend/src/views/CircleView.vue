@@ -334,9 +334,7 @@ function debounceFetchCurveData() {
 
 let deadlineOffset = 5;
 
-setInterval(() => {
-  fetchCurveData();
-}, 2000);
+
 
 const loading = ref(false);
 async function fetchCurveData() {
