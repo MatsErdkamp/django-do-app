@@ -301,11 +301,13 @@ function handleRotation() {
   height: 100vh;
   position: relative;
   background: rgb(0, 0, 0);
+  overflow: hidden;
 }
 
 #chartdiv {
   width: 100%;
   height: 100%;
+  scale: 1.15;
 }
 
 .rotating-dial {
@@ -316,6 +318,7 @@ function handleRotation() {
   left: 22%;
   border-radius: 50%;
   background: conic-gradient(#fff 0%, #fff 4%, #121212 4%, #121212);
+
 }
 
 .circle-inside {
