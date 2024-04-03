@@ -27,10 +27,10 @@
           Car not plugged in
         </div>
         <div class="charge-indicator" v-else-if="charging == true">
-          Charging 54%
+          Charging {{ batteryPercentage }}
         </div>
         <div class="charge-indicator" v-else style="background: #e49623">
-          Not Charging 54%
+          Not Charging {{ batteryPercentage }}
         </div>
       </Transition>
     </div>
