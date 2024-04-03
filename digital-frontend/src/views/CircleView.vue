@@ -94,7 +94,7 @@ function createChart() {
 
     xRenderer.grid.template.set("forceHidden", true);
     // Change X-axis label color to white
-    xRenderer.labels.template.set("fill", am5.color(0xffffff));
+    xRenderer.labels.template.set("fill", am5.color(0x505050));
 
     var xAxis = chart.xAxes.push(
       am5xy.CategoryAxis.new(root, {
@@ -113,7 +113,7 @@ function createChart() {
       am5xy.ValueAxis.new(root, {
         maxDeviation: 0.3,
         min: 0,
-        max: 110,
+        max: 100,
         renderer: yRenderer,
       })
     );
@@ -139,7 +139,7 @@ function createChart() {
     });
 
     for (var i = 0; i < 24; i++) {
-      chargeData.push({ category: i, value: 20 });
+      chargeData.push({ category: i, value: 10 });
     }
 
     chargeData.forEach((item, index) => {
@@ -417,7 +417,7 @@ function setDialToDeadlineOffset(deadlineOffset) {
 
   // Normalize the angle
   if (angle < 0) {
-    angle = 360 + angle;
+    angle = 360 + angle - 40;
   }
 
   // Assuming rotation.value is where you store the current rotation state
