@@ -337,8 +337,9 @@ let deadlineOffset = 5;
 
 
 
-const loading = ref(true);
+const loading = ref(false);
 async function fetchCurveData() {
+  if (loading.value == true) return;
   loading.value = true;
 
   let url = getURL("/api/curve/");
@@ -488,9 +489,11 @@ onMounted(() => {
 
     carState.value = data?.car?.car_state;
 
+
+
     if (offsetUpdatesDisabled == false) {
       deadlineOffset = data?.car?.charge_target_hours;
-      fetchCurveData()
+      fetchCurveData();
       setDialToDeadlineOffset(deadlineOffset);
     }
 
