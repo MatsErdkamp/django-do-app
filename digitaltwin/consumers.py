@@ -31,8 +31,19 @@ class CarConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         action = text_data_json['action']
+        value = text_data_json['value']
+        car = self.car
+
+
+        await self.update_charge_target(car, action, value)
 
         await self.send_update_broadcast()
+
+    @database_sync_to_async
+    def update_charge_target(self, car, action, value):
+
+        car.charge_target_hours = value
+        car.save()
 
     async def send_update(self):
         # Send message to WebSocket client
@@ -50,12 +61,15 @@ class CarConsumer(AsyncWebsocketConsumer):
         return serializer.data
 
     async def send_update_broadcast(self):
+
+        car_data = await self.serialize_car(self.car)
+
         # Send message to room group
         await self.channel_layer.group_send(
             self.room_group_name,
             {
                 'type': 'car_update',
-                'car': 'swag'
+                'car': car_data
             }
         )
 

@@ -5,9 +5,8 @@
     <div class="background-dial"></div>
     <div class="rotating-dial"></div>
 
-    
     <Transition mode="out-in" name="fade">
-      <div v-if="isRotating== true">
+      <div v-if="isRotating == true">
         <div class="rotating-dial-2"></div>
         <div class="rotating-dial-3"></div>
       </div>
@@ -60,6 +59,8 @@ let series2;
 let chargeData = [];
 
 const scores = ref([]);
+
+let offsetUpdatesDisabled = false;
 
 function createChart() {
   am5.ready(function () {
@@ -283,8 +284,6 @@ function handleRotation() {
       val = 360 + val;
     }
 
-    // Simplified update of chargeDeadline based on rotation
-    // You may want to adjust this calculation
     let currentTime = new Date().getHours();
 
     let hours = Math.floor((val % 350) / 14.5) + currentTime;
@@ -313,6 +312,14 @@ function handleRotation() {
     document.removeEventListener("mouseup", stopRotation);
     document.removeEventListener("touchmove", rotateDial);
     document.removeEventListener("touchend", stopRotation);
+
+    ws.send(JSON.stringify({ action: "charge_target", value: deadlineOffset }));
+
+    offsetUpdatesDisabled = true;
+
+    setTimeout(() => {
+      offsetUpdatesDisabled = false;
+    }, 500);
   };
 }
 
@@ -390,6 +397,34 @@ function updateColorStatesAndRefreshData(series, newData) {
   series.data.setAll(newData);
 }
 
+function setDialToDeadlineOffset(deadlineOffset) {
+  if (isRotating.value) return;
+
+  const currentTime = new Date().getHours(); // Get the current hour
+  let targetHours = currentTime + deadlineOffset;
+
+  // Adjust if hours exceed 24-hour format
+  if (targetHours >= 24) {
+    targetHours -= 24;
+  } else if (targetHours < 0) {
+    targetHours += 24;
+  }
+
+  // Convert hours back to angle. The reverse of the original hours calculation
+  let angle = (targetHours - currentTime) * 14.5;
+
+  // Normalize the angle
+  if (angle < 0) {
+    angle = 360 + angle;
+  }
+
+  // Assuming rotation.value is where you store the current rotation state
+  rotation.value = angle;
+
+  // Assuming rotatingDial.value is your dial element
+  rotatingDial.value.style.transform = `rotate(${angle}deg)`;
+}
+
 // --------------------- WEBSOCKETS ----------------------------
 // ---------------------------------
 // ---------------------------------
@@ -436,7 +471,7 @@ onMounted(() => {
   ws.onmessage = function (event) {
     const data = JSON.parse(event.data);
 
-    console.log(event.data)
+    console.log(event.data);
 
     let batteryResponseCharge = data?.car?.battery_percentage;
 
@@ -447,7 +482,11 @@ onMounted(() => {
     let batteryResponseHours = data?.car?.estimated_time_until_full;
 
     carState.value = data?.car?.car_state;
-    deadlineOffset = data?.car?.charge_target_hours;
+
+    if (offsetUpdatesDisabled == false) {
+      deadlineOffset = data?.car?.charge_target_hours;
+      setDialToDeadlineOffset(deadlineOffset);
+    }
 
     if (batteryResponseHours != undefined) {
       let timeString = batteryResponseHours;
@@ -550,7 +589,6 @@ onUnmounted(() => {
   pointer-events: none;
   z-index: 3;
 }
-
 
 .circle-inside {
   position: absolute;
