@@ -319,7 +319,7 @@ function handleRotation() {
 
     setTimeout(() => {
       offsetUpdatesDisabled = false;
-    }, 500);
+    }, 1000);
   };
 }
 
