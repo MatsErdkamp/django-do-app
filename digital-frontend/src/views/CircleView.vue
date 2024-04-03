@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref } from "vue";
+import { onMounted, onUnmounted, ref, watch } from "vue";
 
 // Reactive value for chargeDeadline
 
@@ -334,6 +334,9 @@ function debounceFetchCurveData() {
 
 let deadlineOffset = 5;
 
+
+
+
 const loading = ref(true);
 async function fetchCurveData() {
   loading.value = true;
@@ -487,6 +490,7 @@ onMounted(() => {
 
     if (offsetUpdatesDisabled == false) {
       deadlineOffset = data?.car?.charge_target_hours;
+      fetchCurveData()
       setDialToDeadlineOffset(deadlineOffset);
     }
 
