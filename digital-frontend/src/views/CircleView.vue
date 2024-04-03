@@ -94,7 +94,7 @@ function createChart() {
 
     xRenderer.grid.template.set("forceHidden", true);
     // Change X-axis label color to white
-    xRenderer.labels.template.set("fill", am5.color(0x505050));
+    xRenderer.labels.template.set("fill", am5.color(0x000000));
 
     var xAxis = chart.xAxes.push(
       am5xy.CategoryAxis.new(root, {
@@ -418,7 +418,7 @@ function setDialToDeadlineOffset(deadlineOffset) {
 
   // Normalize the angle
   if (angle < 0) {
-    angle = 360 + angle - 40;
+    angle = 360 + angle;
   }
 
   // Assuming rotation.value is where you store the current rotation state
