@@ -5,7 +5,7 @@ from datetime import timedelta
 class CarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Car
-        fields = ['id', 'name', 'identifier', 'battery_percentage', 'charge_state', 'estimated_time_until_full']
+        fields = ['id', 'name', 'identifier', 'battery_percentage', 'charge_state','car_state', 'estimated_time_until_full']
 
     def update(self, instance, validated_data):
         instance.battery_percentage = validated_data.get('battery_percentage', instance.battery_percentage)
