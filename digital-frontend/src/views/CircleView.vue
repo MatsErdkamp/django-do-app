@@ -334,8 +334,9 @@ function debounceFetchCurveData() {
 
 let deadlineOffset = 5;
 
-
-
+setInterval(() => {
+  fetchCurveData();
+}, 2000);
 
 const loading = ref(false);
 async function fetchCurveData() {
@@ -345,9 +346,7 @@ async function fetchCurveData() {
   let url = getURL("/api/curve/");
 
   try {
-    const response = await fetch(
-      url + "?deadline=" + deadlineOffset
-    );
+    const response = await fetch(url + "?deadline=" + deadlineOffset);
     if (!response.ok) {
       throw new Error("Failed to fetch");
     }
@@ -414,7 +413,7 @@ function setDialToDeadlineOffset(deadlineOffset) {
     targetHours += 24;
   }
 
-  chargeDeadline.value = `${targetHours}:00`
+  chargeDeadline.value = `${targetHours}:00`;
 
   // Convert hours back to angle. The reverse of the original hours calculation
   let angle = (targetHours - currentTime) * 14.5;
@@ -488,8 +487,6 @@ onMounted(() => {
     let batteryResponseHours = data?.car?.estimated_time_until_full;
 
     carState.value = data?.car?.car_state;
-
-
 
     if (offsetUpdatesDisabled == false) {
       deadlineOffset = data?.car?.charge_target_hours;
