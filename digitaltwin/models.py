@@ -24,6 +24,10 @@ class Car(models.Model):
     charge_state = models.CharField(
         max_length=100
     )  # e.g., "charging", "discharging", "full"
+    car_state = models.CharField(
+        max_length=100
+    )  # e.g., "connected", "plugged_in"
+
     estimated_time_until_full = (
         models.DurationField()
     )

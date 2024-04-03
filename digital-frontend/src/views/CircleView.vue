@@ -12,7 +12,7 @@
       <div class="charge-deadline">charge deadline for 'work'</div>
 
       <Transition mode="out-in" name="fade">
-        <div class="charge-indicator" v-if="carFound == false" style="background: #c71d3b" >Car not Connected</div>
+        <div class="charge-indicator" v-if="carState != 'plugged_in'" style="background: #c71d3b" >Car not plugged in</div>
         <div class="charge-indicator" v-else-if="charging == true">Charging 54%</div>
         <div class="charge-indicator" v-else style="background: #e49623" >
           Not Charging 54%
@@ -33,7 +33,7 @@ const rotation = ref(0); // Initial rotation in degrees
 
 
 const charging = ref(false);
-const carFound = ref(false);
+const carState = ref('Not Connected');
 
 
 onMounted(() => {
@@ -431,6 +431,8 @@ onMounted(() => {
     }
 
     let batteryResponseHours = data?.car?.estimated_time_until_full;
+
+    carState.value = data?.car?.car_state;
 
     if (batteryResponseHours != undefined) {
       let timeString = batteryResponseHours;

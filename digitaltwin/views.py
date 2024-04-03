@@ -39,7 +39,7 @@ class CarUpdateView(APIView):
             state = self.request.GET.get('car_state', None)
 
             if state != None:
-                car.charge_state = state
+                car.car_state = state
                 car.last_update = datetime.now()
                 car.save()
         except:
