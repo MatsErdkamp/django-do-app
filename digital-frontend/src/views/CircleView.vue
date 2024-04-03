@@ -2,10 +2,16 @@
   <div class="circle-container">
     <div id="chartdiv"></div>
 
-    
     <div class="background-dial"></div>
     <div class="rotating-dial"></div>
-    <div class="rotating-dial-2"></div>
+
+    
+    <Transition mode="out-in" name="fade">
+      <div v-if="isRotating== true">
+        <div class="rotating-dial-2"></div>
+        <div class="rotating-dial-3"></div>
+      </div>
+    </Transition>
 
     <div class="circle-inside">
       <div class="clock">{{ new Date().toLocaleTimeString() }}</div>
@@ -14,9 +20,17 @@
       <div class="charge-deadline">charge deadline for 'work'</div>
 
       <Transition mode="out-in" name="fade">
-        <div class="charge-indicator" v-if="carState != 'plugged_in'" style="background: #c71d3b" >Car not plugged in</div>
-        <div class="charge-indicator" v-else-if="charging == true">Charging 54%</div>
-        <div class="charge-indicator" v-else style="background: #e49623" >
+        <div
+          class="charge-indicator"
+          v-if="carState != 'plugged_in'"
+          style="background: #c71d3b"
+        >
+          Car not plugged in
+        </div>
+        <div class="charge-indicator" v-else-if="charging == true">
+          Charging 54%
+        </div>
+        <div class="charge-indicator" v-else style="background: #e49623">
           Not Charging 54%
         </div>
       </Transition>
@@ -32,11 +46,8 @@ import { onMounted, onUnmounted, ref } from "vue";
 const chargeDeadline = ref("14:00");
 const rotation = ref(0); // Initial rotation in degrees
 
-
-
 const charging = ref(false);
-const carState = ref('Not Connected');
-
+const carState = ref("Not Connected");
 
 onMounted(() => {
   fetchCurveData();
@@ -202,6 +213,7 @@ function setData(series, data) {
 
 // Element reference for rotating dial
 const rotatingDial = ref(null);
+const isRotating = ref(false);
 
 function handleRotation() {
   rotatingDial.value = document.querySelector(".rotating-dial");
@@ -213,6 +225,8 @@ function handleRotation() {
   const startRotation = (event) => {
     // Prevent default action for the event to avoid potential scrolling or other touch actions
     event.preventDefault();
+
+    isRotating.value = true;
 
     isDragging = true;
     const rect = rotatingDial.value.getBoundingClientRect();
@@ -294,6 +308,7 @@ function handleRotation() {
 
   const stopRotation = () => {
     isDragging = false;
+    isRotating.value = false;
     document.removeEventListener("mousemove", rotateDial);
     document.removeEventListener("mouseup", stopRotation);
     document.removeEventListener("touchmove", rotateDial);
@@ -375,15 +390,10 @@ function updateColorStatesAndRefreshData(series, newData) {
   series.data.setAll(newData);
 }
 
-
-
-
 // --------------------- WEBSOCKETS ----------------------------
 // ---------------------------------
 // ---------------------------------
 // ---------------------------------
-
-
 
 function createWebSocket() {
   // Determine the current web protocol
@@ -455,10 +465,6 @@ onMounted(() => {
 onUnmounted(() => {
   ws.close();
 });
-
-
-
-
 </script>
 
 <style>
@@ -485,7 +491,6 @@ onUnmounted(() => {
   border-radius: 50%;
   background: #121212;
   pointer-events: none;
-
 }
 
 .rotating-dial {
@@ -503,7 +508,6 @@ onUnmounted(() => {
     transparent
   );
   z-index: 1;
-
 }
 
 .rotating-dial-2 {
@@ -516,7 +520,7 @@ onUnmounted(() => {
   background: conic-gradient(
     transparent 0%,
     #d423e4 0.1%,
-    #d423e4 4.0%,
+    #d423e4 4%,
     transparent 4.1%,
     transparent
   );
@@ -524,6 +528,26 @@ onUnmounted(() => {
   pointer-events: none;
   z-index: 3;
 }
+
+.rotating-dial-3 {
+  position: absolute;
+  width: 60%;
+  height: 60%;
+  top: 20%;
+  left: 20%;
+  border-radius: 50%;
+  background: conic-gradient(
+    transparent 0%,
+    #23b7e4 0.1%,
+    #23b7e4 4%,
+    transparent 4.1%,
+    transparent
+  );
+  rotate: 220deg;
+  pointer-events: none;
+  z-index: 3;
+}
+
 
 .circle-inside {
   position: absolute;
@@ -568,7 +592,6 @@ onUnmounted(() => {
   font-size: 1.4em;
 }
 
-
 /* we will explain what these classes do next! */
 .fade-enter-active,
 .fade-leave-active {
@@ -579,5 +602,4 @@ onUnmounted(() => {
 .fade-leave-to {
   opacity: 0;
 }
-
 </style>
