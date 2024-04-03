@@ -16,7 +16,7 @@
       <div class="clock">{{ new Date().toLocaleTimeString() }}</div>
 
       <div class="deadline-clock">{{ chargeDeadline }}</div>
-      <div class="charge-deadline">charge deadline for 'work'</div>
+      <div class="charge-deadline">charge deadline</div>
 
       <Transition mode="out-in" name="fade">
         <div
