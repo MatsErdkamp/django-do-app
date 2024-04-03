@@ -10,7 +10,8 @@
       <div class="deadline-clock">{{ chargeDeadline }}</div>
       <div class="charge-deadline">charge deadline for 'work'</div>
 
-      <div class="charge-indicator">charging 54%</div>
+      <div class="charge-indicator" v-if="charging == true">charging 54%</div>
+      <div class="charge-indicator" style="background:#c71d3b" v-else>Not Charging 54%</div>
     </div>
   </div>
 </template>
@@ -24,10 +25,19 @@ const currentTime = ref("11:");
 const chargeDeadline = ref("14:00");
 const rotation = ref(0); // Initial rotation in degrees
 
+const charging = ref(false)
+
 onMounted(() => {
+  fetchCurveData();
   createChart();
   handleRotation();
 });
+
+let series;
+let series2;
+let chargeData = [];
+
+const scores = ref([]);
 
 function createChart() {
   am5.ready(function () {
@@ -87,7 +97,7 @@ function createChart() {
 
     // Add series
     // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
-    var series = chart.series.push(
+    series = chart.series.push(
       am5radar.RadarColumnSeries.new(root, {
         name: "Series 1",
         sequencedInterpolation: true,
@@ -105,18 +115,25 @@ function createChart() {
       tooltipText: "{categoryX}: {valueY}",
     });
 
-    setSeriesColor(series);
-
-    // Set data
-    var data = [];
-
     for (var i = 0; i < 24; i++) {
-      data.push({ category: i, value: 20 });
+      chargeData.push({ category: i, value: 20 });
     }
+
+    chargeData.forEach((item, index) => {
+      item.colorState = chargeMask[index] === true ? "#22e66a" : "#212121";
+    });
+
+    series.columns.template.adapters.add("fill", (fill, target) => {
+      return target.dataItem.dataContext.colorState;
+    });
+
+    series.columns.template.adapters.add("stroke", (stroke, target) => {
+      return target.dataItem.dataContext.colorState;
+    });
 
     // Add series
     // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
-    var series2 = chart.series.push(
+    series2 = chart.series.push(
       am5radar.RadarColumnSeries.new(root, {
         name: "Series 1",
         sequencedInterpolation: true,
@@ -142,16 +159,16 @@ function createChart() {
       return "#2263e6";
     });
 
-    // Set data
-    var data2 = [];
+    xAxis.data.setAll(chargeData);
+    series.data.setAll(chargeData);
 
-    for (var i = 0; i < 24; i++) {
-      data2.push({ category: i, value: Math.round(Math.random() * 100) });
-    }
-
-    xAxis.data.setAll(data);
-    series.data.setAll(data);
-    series2.data.setAll(data2);
+    setData(
+      series2,
+      [
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0,
+      ]
+    );
 
     // Make stuff animate on load
     // https://www.amcharts.com/docs/v5/concepts/animations/
@@ -161,50 +178,15 @@ function createChart() {
   });
 }
 
-const booleanMask = [
-  true,
-  false,
-  false,
-  false,
-  true,
-  true,
-  true,
-  false,
-  true,
-  false,
-  false,
-  false,
-  true,
-  true,
-  true,
-  false,
-  true,
-  false,
-  false,
-  false,
-  true,
-  true,
-  true,
-  false,
-];
+function setData(series, data) {
+  // Set data
+  var data2 = [];
 
-function setSeriesColor(series) {
-  // Make each column to be of a different color
-  series.columns.template.adapters.add("fill", function (fill, target) {
-    if (booleanMask[series.columns.indexOf(target)] === true) {
-      return "#22e66a";
-    } else {
-      return "#212121";
-    }
-  });
+  for (var i = 0; i < 24; i++) {
+    data2.push({ category: i, value: data[i] });
+  }
 
-  series.columns.template.adapters.add("stroke", function (stroke, target) {
-    if (booleanMask[series.columns.indexOf(target)] === true) {
-      return "#22e66a";
-    } else {
-      return "#212121";
-    }
-  });
+  series.data.setAll(data2);
 }
 
 // Element reference for rotating dial
@@ -246,11 +228,11 @@ function handleRotation() {
   rotatingDial.value.addEventListener("mousedown", startRotation);
   rotatingDial.value.addEventListener("touchstart", startRotation, {
     passive: false,
-  }); 
+  });
 
   const rotateDial = (event) => {
     event.preventDefault();
-    
+
     if (!isDragging) return;
 
     const rect = rotatingDial.value.getBoundingClientRect();
@@ -259,8 +241,8 @@ function handleRotation() {
 
     // Handle touch move
     if (event.touches) {
-        clientX = event.touches[0].clientX;
-        clientY = event.touches[0].clientY;
+      clientX = event.touches[0].clientX;
+      clientY = event.touches[0].clientY;
     }
 
     const centerX = rect.left + rect.width / 2;
@@ -270,7 +252,6 @@ function handleRotation() {
     rotation.value += deltaAngle * (180 / Math.PI);
     rotatingDial.value.style.transform = `rotate(${rotation.value}deg)`;
 
-
     let val = rotation.value;
 
     if (val < 0) {
@@ -279,10 +260,25 @@ function handleRotation() {
 
     // Simplified update of chargeDeadline based on rotation
     // You may want to adjust this calculation
-    const hours = Math.floor((val % 350) / 14.5);
+    let currentTime = new Date().getHours();
+
+    let hours = Math.floor((val % 350) / 14.5) + currentTime;
+
+    if (hours >= 24) {
+      hours -= 24;
+    }
+
     chargeDeadline.value = `${hours}:00`;
 
+    deadlineOffset = hours - currentTime;
+
+    if (deadlineOffset < 0) {
+      deadlineOffset += 24;
+    }
+
     startAngle = currentAngle;
+
+    debounceFetchCurveData();
   };
 
   const stopRotation = () => {
@@ -291,7 +287,82 @@ function handleRotation() {
     document.removeEventListener("mouseup", stopRotation);
     document.removeEventListener("touchmove", rotateDial);
     document.removeEventListener("touchend", stopRotation);
-};
+  };
+}
+
+// Define a debounced version of fetchCurveData
+let debounceTimer;
+function debounceFetchCurveData() {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(() => {
+    fetchCurveData();
+  }, 100); // Debounce time of 200ms
+}
+
+
+let deadlineOffset = 5;
+
+const loading = ref(true);
+async function fetchCurveData() {
+  loading.value = true;
+
+  let url = getURL("/api/curve/");
+
+  try {
+    const response = await fetch(
+      url + "?deadline=" + deadlineOffset + "&hours=" + 10
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch");
+    }
+    const data = await response.json();
+    chargeMask = data.best_options;
+
+    scores.value = data.scores.split(",").map(function (item) {
+      return parseInt(item, 10);
+    });
+
+    setData(series2, scores.value);
+
+    // Assuming your data update logic happens here
+    chargeMask.forEach((isActive, index) => {
+      chargeData[index].colorState = isActive ? "#22e66a" : "#212121";
+    });
+
+    if ( chargeMask[0] == true ){ 
+        charging.value = true;
+    } else {
+        charging.value = false;
+    }
+
+    // Call this function whenever you need to update the chart's color states
+    updateColorStatesAndRefreshData(series, chargeData);
+  } catch (err) {
+    console.log(err);
+  } finally {
+    loading.value = false;
+  }
+}
+
+function getURL(endpoint) {
+  let host = "https://charging-twin-qw8ag.ondigitalocean.app";
+
+  if (
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
+  ) {
+    host = "http://localhost:8000";
+  }
+
+  return host + endpoint;
+}
+
+let chargeMask = [
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+];
+
+function updateColorStatesAndRefreshData(series, newData) {
+  series.data.setAll(newData);
 }
 </script>
 
@@ -302,13 +373,12 @@ function handleRotation() {
   position: relative;
   background: rgb(0, 0, 0);
   overflow: hidden;
-
 }
 
 #chartdiv {
   width: 114%;
   height: 114%;
-    margin: -7%;
+  margin: -7%;
 }
 
 .rotating-dial {
@@ -319,8 +389,6 @@ function handleRotation() {
   left: 18%;
   border-radius: 50%;
   background: conic-gradient(#fff 0%, #fff 4%, #121212 4%, #121212);
-
-
 }
 
 .circle-inside {
@@ -338,7 +406,6 @@ function handleRotation() {
   border-radius: 50%;
   user-select: none;
   pointer-events: none;
-
 }
 
 .clock {
