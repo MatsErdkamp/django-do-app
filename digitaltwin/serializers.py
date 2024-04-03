@@ -20,7 +20,7 @@ class CarSerializer(serializers.ModelSerializer):
         #     instance.charge_state = 'full'
         # else:
         #     instance.charge_state = 'charging'
-        
+
         instance.save()
         return instance
 

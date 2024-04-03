@@ -87,9 +87,9 @@ class ChargeScoresView(APIView):
         closest_entry = queryset.first()
 
         deadline = self.request.GET.get('deadline', 5)
-        hours = self.request.GET.get('hours', 5)
+        hours = self.request.GET.get('hours', None)
 
-        print(hours)
+
 
         if closest_entry:
             # Serialize the object
@@ -97,11 +97,18 @@ class ChargeScoresView(APIView):
                 closest_entry, context={'request': request})
             # Return a Response object with the serialized data
 
+
+            car = Car.objects.get(id=1)
+
+            if hours == None:
+                hours = car.estimated_time_until_full.total_seconds() / 3600
+
+
+
             data = serializer.data
             data['best_options'] = find_best_options(
                 data['scores'], int(deadline), int(hours))
 
-            car = Car.objects.get(id=1)
 
             if (data['best_options'][0] == True):
                 car.charge_state = 'charging'

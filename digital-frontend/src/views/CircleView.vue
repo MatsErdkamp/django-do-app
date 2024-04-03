@@ -342,7 +342,7 @@ async function fetchCurveData() {
 
   try {
     const response = await fetch(
-      url + "?deadline=" + deadlineOffset + "&hours=" + 10
+      url + "?deadline=" + deadlineOffset
     );
     if (!response.ok) {
       throw new Error("Failed to fetch");
