@@ -447,6 +447,7 @@ onMounted(() => {
     let batteryResponseHours = data?.car?.estimated_time_until_full;
 
     carState.value = data?.car?.car_state;
+    deadlineOffset = data?.car?.charge_target_hours;
 
     if (batteryResponseHours != undefined) {
       let timeString = batteryResponseHours;
