@@ -5,7 +5,7 @@
     <div class="rotating-dial"></div>
 
     <div class="circle-inside">
-      <div class="clock"> {{ new Date().toLocaleTimeString() }} </div>
+      <div class="clock">{{ new Date().toLocaleTimeString() }}</div>
 
       <div class="deadline-clock">{{ chargeDeadline }}</div>
       <div class="charge-deadline">charge deadline for 'work'</div>
@@ -20,7 +20,7 @@ import { onMounted, ref } from "vue";
 
 // Reactive value for chargeDeadline
 
-const currentTime = ref("11:")
+const currentTime = ref("11:");
 const chargeDeadline = ref("14:00");
 const rotation = ref(0); // Initial rotation in degrees
 
@@ -161,25 +161,48 @@ function createChart() {
   });
 }
 
-
-const booleanMask = [true, false, false, false, true, true, true, false, true, false, false, false, true, true, true, false, true, false, false, false, true, true, true, false]
-
+const booleanMask = [
+  true,
+  false,
+  false,
+  false,
+  true,
+  true,
+  true,
+  false,
+  true,
+  false,
+  false,
+  false,
+  true,
+  true,
+  true,
+  false,
+  true,
+  false,
+  false,
+  false,
+  true,
+  true,
+  true,
+  false,
+];
 
 function setSeriesColor(series) {
   // Make each column to be of a different color
   series.columns.template.adapters.add("fill", function (fill, target) {
     if (booleanMask[series.columns.indexOf(target)] === true) {
-    return "#22e66a";
+      return "#22e66a";
     } else {
-        return "#212121";
+      return "#212121";
     }
   });
 
   series.columns.template.adapters.add("stroke", function (stroke, target) {
     if (booleanMask[series.columns.indexOf(target)] === true) {
-    return "#22e66a";
+      return "#22e66a";
     } else {
-        return "#212121";
+      return "#212121";
     }
   });
 }
@@ -195,35 +218,63 @@ function handleRotation() {
   let startAngle = 0;
 
   const startRotation = (event) => {
+    // Prevent default action for the event to avoid potential scrolling or other touch actions
+    event.preventDefault();
+
     isDragging = true;
     const rect = rotatingDial.value.getBoundingClientRect();
+    let clientX = event.clientX;
+    let clientY = event.clientY;
+
+    // Handle touch start
+    if (event.touches) {
+      clientX = event.touches[0].clientX;
+      clientY = event.touches[0].clientY;
+    }
+
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
-    startAngle = Math.atan2(event.clientY - centerY, event.clientX - centerX);
+    startAngle = Math.atan2(clientY - centerY, clientX - centerX);
+
+    // Add both mouse and touch move/end listeners
     document.addEventListener("mousemove", rotateDial);
     document.addEventListener("mouseup", stopRotation);
+    document.addEventListener("touchmove", rotateDial, { passive: false }); // Use passive: false to allow preventDefault
+    document.addEventListener("touchend", stopRotation);
   };
 
   rotatingDial.value.addEventListener("mousedown", startRotation);
+  rotatingDial.value.addEventListener("touchstart", startRotation, {
+    passive: false,
+  }); 
 
   const rotateDial = (event) => {
+    event.preventDefault();
+    
     if (!isDragging) return;
+
     const rect = rotatingDial.value.getBoundingClientRect();
+    let clientX = event.clientX;
+    let clientY = event.clientY;
+
+    // Handle touch move
+    if (event.touches) {
+        clientX = event.touches[0].clientX;
+        clientY = event.touches[0].clientY;
+    }
+
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
-    const currentAngle = Math.atan2(
-      event.clientY - centerY,
-      event.clientX - centerX
-    );
+    const currentAngle = Math.atan2(clientY - centerY, clientX - centerX);
     const deltaAngle = currentAngle - startAngle;
-    rotation.value += deltaAngle * (180 / Math.PI) ;
+    rotation.value += deltaAngle * (180 / Math.PI);
     rotatingDial.value.style.transform = `rotate(${rotation.value}deg)`;
 
 
-    let val = rotation.value
+    let val = rotation.value;
 
     if (val < 0) {
-        val = 360 + val
+      val = 360 + val;
     }
 
     // Simplified update of chargeDeadline based on rotation
@@ -238,7 +289,9 @@ function handleRotation() {
     isDragging = false;
     document.removeEventListener("mousemove", rotateDial);
     document.removeEventListener("mouseup", stopRotation);
-  };
+    document.removeEventListener("touchmove", rotateDial);
+    document.removeEventListener("touchend", stopRotation);
+};
 }
 </script>
 
