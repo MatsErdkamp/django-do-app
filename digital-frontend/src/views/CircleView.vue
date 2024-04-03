@@ -10,7 +10,7 @@
       <div class="deadline-clock">{{ chargeDeadline }}</div>
       <div class="charge-deadline">charge deadline for 'work'</div>
 
-      <div class="charge-indicator">charging</div>
+      <div class="charge-indicator">charging 54%</div>
     </div>
   </div>
 </template>
