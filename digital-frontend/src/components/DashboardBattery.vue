@@ -29,33 +29,9 @@ const batteryData = ref(null);
 const loading = ref(false);
 const error = ref(null);
 
-
-
 const props = defineProps({
   charge: Number,
-  hours: Number
-
-})
-
-
-async function fetchCalendarData() {
-  loading.value = true;
-  try {
-    const response = await fetch("http://127.0.0.1:8000/api/calendar/");
-    if (!response.ok) {
-      throw new Error("Failed to fetch");
-    }
-    const data = await response.json();
-    batteryData.value = data[0].google_response.items;
-  } catch (err) {
-    error.value = err.message;
-  } finally {
-    loading.value = false;
-  }
-}
-
-onMounted(() => {
-  fetchCalendarData();
+  hours: Number,
 });
 </script>
 
