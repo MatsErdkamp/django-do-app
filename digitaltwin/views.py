@@ -9,6 +9,7 @@ import random
 from django.db.models.functions import Now
 from django.db.models import F, ExpressionWrapper, fields
 import json
+from datetime import datetime
 
 class CarUpdateView(APIView):
     permission_classes = [permissions.AllowAny]
@@ -35,10 +36,11 @@ class CarUpdateView(APIView):
 
 
         try:
-            percentage = self.request.GET.get('car_state', None)
+            state = self.request.GET.get('car_state', None)
 
-            if percentage != None:
-                car.charge_state
+            if state != None:
+                car.charge_state = state
+                car.last_update = datetime.now()
                 car.save()
         except:
             return Response({'message': 'Could not update charge state'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
